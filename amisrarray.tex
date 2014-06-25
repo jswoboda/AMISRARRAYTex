@@ -1,0 +1,372 @@
+
+\documentclass[draft,ras]{Template/AGUTeX}
+\usepackage{graphicx}   % if you want to include graphics files
+\usepackage{subfigure}
+\usepackage{setspace}
+\usepackage{amsxtra}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{bm}
+\RequirePackage{lineno}
+\linenumbers
+% graphics path
+\graphicspath{{Figs/}}
+
+\authorrunninghead{WICHMAN ET AL.}
+\titlerunninghead{AMISR ARRAY}
+
+
+\authoraddr{Corresponding author: A. R. Wichman,
+Department of Electrical \& Computer Engineering,
+Boston University, 8 Saint Mary’s Street
+Boston, MA 02215, USA.
+(arw@bu.edu)}
+
+\begin{document}
+
+\title{AMISR Array Antenna Patterns And Mutual Coupling Estimates}%
+%%%%%%%%%%%%%% Author Info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authors{Adam Whichman, \altaffilmark{1} John Swoboda,\altaffilmark{1}
+Joshua Semeter,\altaffilmark{1} }
+
+\altaffiltext{1}{Department of Electrical \& Computer Engineering,
+Boston University, Boston, Massachusetts, USA.}
+\altaffiltext{2}{Atmospheric Science Division,
+MIT Haystack Observatory, Westford Massachusetts, USA.}
+\begin{abstract}
+This reports results from modeling the far field radiation patterns for various proposed configurations of the Advanced Modular Incoherent Scatter Radar (AMISR) phased array, ranging up to 4,096 cross half-wavelength dipoles in a 8x16 unit panel configuration presently installed at Poker Flat, Alaska.  The boresight far field radiation was determined using the multi level fast monopole method (MLFMM), a variation on the method of moments, with the FEKO suite from EM Software \& Systems.  The normalized antenna radiation intensity and antenna patterns are compared to the analytical result from ideal element and array patterns, at two azimuthal orientations, taking the difference as a proxy for mutual coupling.  In each case the idealized element and array pattern (without backplane) overestimates the far field radiation and normalized radiation intensity when the elevation drops 20 or more degrees from boresight.  While the difference between the numerical solution and the ideal normalized radiation intensity can span up to 20 dB, however, given the high centerline gain this variation arises at points where the gain or radiation pattern amplitude has already fallen significantly (e.g., more than 40 dB for the 1x32 array, more than 35 dB for the 8x16 array) from center-peak.  Mutual coupling thus appears to have minimal impact on boresight operation, but may warrant further investigation for scanning angles approaching ~20+ degrees, depending on the array configuration under study.  
+\end{abstract}
+
+
+\begin{article}
+
+\section{Introduction}
+HE Advanced Modular Incoherent Scatter Radar (AMISR) is a modular phased array for atmospheric research at 430-450 MHz. [1]  The current array configurations include a 8x16 panel face in Poker Flat, Alaska and two faces in Resolute Bay, Canada, with ~ 1.1° beamwidth, an aperture ~ 715 m2, and gain ~ 43 dBi. [1]
+
+Several other antenna configurations have been proposed.  The antenna radiation and radiation intensity patterns, however, have not been definitively determined.  As a result, it is not known how the predictive antenna pattern should be altered from the idealized case to account for mutual coupling.  In this project we investigate the far field antenna and normalized radiation intensity patterns (“antenna power”) using numerical simulation to solve Maxwell’s equations for a realistic array model.  Because the numerical solution includes mutual coupling, we can estimate the mutual coupling effects by comparing the numerical solution to the respective ideal antenna patterns.  
+
+For large arrays mutual coupling is generally addressed by assuming it affects scale but not pattern.  In large arrays with elements spaced along a grid at regular intervals, the edge effects are ignored and the pattern distortion effect is a simple scaling of relative amplitude patterns while preserving the relative pattern shape. [2] In the AMISR case, we find that edge effects are insignificant within 20° of boresight but become increasingly noticeable at lower elevation for each configuration studied.  The edge effects, however, correspond to reduced far field gain at low elevation where the gain has already fallen by a sizeable margin from the maximum.  This result may matter to operations that steer the beam at or above ? = 20° from boresight elevation.   
+
+\section{Methodology}
+\subsection{Mutual Coupling}
+The dense AMISR antennas are subject to mutual coupling among the constituent dipole elements from radiation, electronic cross talk, and indirect scattering from proximate objects.  This report considers the effects of radiative mutual coupling, in which each antenna radiates some portion of received signal to each other antenna element, and likewise receives radiation from each other antenna element as well as from the original source. [2, 3, 4, 5] The variation in the antenna currents results in variations in the element-wise input impedances as well as gain and the far field radiation patterns. The mutual coupling can also excite the polarization not directly excited by the signal source.  [2, 3]  In this project, we focus on the far field radiation pattern amplitude, without considering the detailed affects on element impedance or associated scattering matrix.  Polarization data is available and could be the basis of further study.  
+
+\subsection{Antenna Pattern}
+Active impedance of an array element is difficult to measure and its availability for the proposed AMISR configurations unclear. [3, 4, 5, 6]  In response to this general problem, several predictive numerical techniques have been developed to estimate far field patterns including mutual coupling. [3, 5, 6] By modeling the case of uniform element excitation this study conceptually follows the “average active-element model” insight that groups mutual coupling effects with an “average” antenna element pattern rather than in the element excitation current.  [3, 4]  We do not attempt to calculate an average element pattern, however, but simply compare the numerical model, with mutual coupling, to the ideal antenna pattern.  In particular, we take the idealized cross half wave dipole antenna element radiation intensity as Ea=1 + cos2(?), and model the array pattern as two interleaved rectangular arrays with 2 dx spacing and a dx, dy/2 relative offset.  [3, 8]  The ideal comparison does not account for reflection from the backplane.
+
+In numerical antenna simulation the method of moments (MoM) takes mutual coupling into account when solving the applicable Maxwell equations. [3, 5, 6]  While the MoM has been widely used in optimization and design analysis codes like NEC, the method is cumbersome for electrically large problems.  [7, 10] A variation on the MoM formulation, the multipole fast monopole method (MLFMM), is better suited to far field calculations for large structures such as the various proposed AMISR configurations. [9, 10] Generally speaking, the MLFMM formulation uses characteristic basis functions and takes advantage of symmetry / sparsity in the matrix formulation for calculating the full-wave current-based solution of Maxwell’s equations.  [Id.] The MLFMM solves the interaction between groups of basis functions rather than individual basis functions.  [Id.] This provides more tractable N log (N) memory scaling, rather than N [log(N)]2 scaling with the method of moments formulation. [Id.]  
+
+Commercial antenna design software provides a MLFMM implementation.  For this project we use the FEKO suite 6.3 from EM Software \& Systems as the computer-aided design (CAD) package for antenna analysis.  The numerical routines include a MLFMM solver. [9]
+
+\subsection{CAD Testbed}
+The CAD model is assembled in FEKO using the array and element parameters provided by the AMISR operator SRI International. [1]
+\subsubsection{AMISR unit panel}
+The AMISR unit panel comprises 32 cross dipoles in triangular configuration on roughly a 3.47 m x 1.98 m meshed aluminum backplane. [1]  The AMISR operating range is 430 – 450 MHz, or free space wavelengths 67 – 70 cm.  [1] The AMISR unit panel elements comprise crossed 34 cm long, 1 cm radius aluminum dipoles, or slightly less than half-wave at 450 MHz.  [11] The crossed dipoles are situated 18 cm above the backplane, each with its own solid-state power supply. [11]
+
+The long (x) axis element (column) spacing dx = 0.4343 m, while the short (y) axis element (row) spacing dy=0.4958 m.  Every second column is (row) offset dy/2 relative to the prior column, so that the element row for each second column is located midway between the prior column rows.  This allows us to model the unit panel as two interleaved, finite 4x4 arrays with the second array offset by (dx, dy/2) from the first.  Notwithstanding the spacing adjustments available when combining unit panels into array configurations, as shown below, given the relative dipole length (34 cm) and y spacing (dy = 49.58 cm) this results in roughly 6 cm y-directed dipole overlap between panels. 
+
+The dipole overlap in the AMISR arrays requires a finite array CAD model (e.g., precludes modeling subsets of infinite arrays with periodic boundary conditions), and limits us to replicating core elements without associated finite ground planes.  Nonetheless, the AMISR unit panel symmetry lets us generate a CAD model from a base configuration using two offset cross dipoles above an infinite, perfectly conducting ground plane. 
+
+The dipoles are specified in aluminum using default material parameter files (e.g., ?r = 1, ? = 3.816e7 S/m) in FEKO, while the vertical post is treated as a perfect conductor.  The dipoles and vertical post are electrically isolated.  We separately excite the x and y oriented dipoles with ports on each element.  The y-oriented dipoles are excited at a 90° phase offset from the x-oriented dipoles.  Because we simulate boresight far fields, positional or steering phase offsets are not introduced in the excitation.  The far field simulation uniformly excites each port by 1 V at 440 MHz with 50 Ω source impedance.  The dipole impedance, of course, varies with mutual coupling in each element as numerically determined in simulation.The AMISR unit panel is then modeled as a 4x4 finite array of the two-element CAD model, with x offset 2 dx and y offset dy.  
+
+The AMISR unit panel CAD model is scaled by m and n for m x-oriented panels, and n y-oriented panels to create the CAD model for a m x n panel array.  The ground plane is imposed after scaling the two-element CAD model for the desired array configuration.
+
+
+\begin{acknowledgments}
+(Text here)
+\end{acknowledgments}
+
+%% ------------------------------------------------------------------------ %%
+%%  REFERENCE LIST AND TEXT CITATIONS
+%
+% Either type in your references using
+% \begin{thebibliography}{}
+% \bibitem{}
+% Text
+% \end{thebibliography}
+%
+% Or,
+%
+% If you use BiBTeX for your references, please use the agufull08.bst file (available at % ftp://ftp.agu.org/journals/latex/journals/Manuscript-Preparation/) to produce your .bbl
+% file and copy the contents into your paper here.
+%
+% Follow these steps:
+% 1. Run LaTeX on your LaTeX file.
+%
+% 2. Make sure the bibliography style appears as \bibliographystyle{agufull08}. Run BiBTeX on your LaTeX
+% file.
+%
+% 3. Open the new .bbl file containing the reference list and
+%   copy all the contents into your LaTeX file here.
+%
+% 4. Comment out the old \bibliographystyle and \bibliography commands.
+%
+% 5. Run LaTeX on your new file before submitting.
+%
+% AGU does not want a .bib or a .bbl file. Please copy in the contents of your .bbl file here.
+
+\begin{thebibliography}{}
+
+%\providecommand{\natexlab}[1]{#1}
+%\expandafter\ifx\csname urlstyle\endcsname\relax
+%  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+%  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+%  \urlstyle{rm}\Url}\fi
+%
+%\bibitem[{\textit{Atkinson and Sloan}(1991)}]{AtkinsonSloan}
+%Atkinson, K., and I.~Sloan (1991), The numerical solution of first-kind
+%  logarithmic-kernel integral equations on smooth open arcs, \textit{Math.
+%  Comp.}, \textit{56}(193), 119--139.
+%
+%\bibitem[{\textit{Colton and Kress}(1983)}]{ColtonKress1}
+%Colton, D., and R.~Kress (1983), \textit{Integral Equation Methods in
+%  Scattering Theory}, John Wiley, New York.
+%
+%\bibitem[{\textit{Hsiao et~al.}(1991)\textit{Hsiao, Stephan, and
+%  Wendland}}]{StephanHsiao}
+%Hsiao, G.~C., E.~P. Stephan, and W.~L. Wendland (1991), On the {D}irichlet
+%  problem in elasticity for a domain exterior to an arc, \textit{J. Comput.
+%  Appl. Math.}, \textit{34}(1), 1--19.
+%
+%\bibitem[{\textit{Lu and Ando}(2012)}]{LuAndo}
+%Lu, P., and M.~Ando (2012), Difference of scattering geometrical optics
+%  components and line integrals of currents in modified edge representation,
+%  \textit{Radio Sci.}, \textit{47},  RS3007, \doi{10.1029/2011RS004899}.
+
+\end{thebibliography}
+
+%Reference citation examples:
+
+%...as shown by \textit{Kilby} [2008].
+%...as shown by {\textit  {Lewin}} [1976], {\textit  {Carson}} [1986], {\textit  {Bartholdy and Billi}} [2002], and {\textit  {Rinaldi}} [2003].
+%...has been shown [\textit{Kilby et al.}, 2008].
+%...has been shown [{\textit  {Lewin}}, 1976; {\textit  {Carson}}, 1986; {\textit  {Bartholdy and Billi}}, 2002; {\textit  {Rinaldi}}, 2003].
+%...has been shown [e.g., {\textit  {Lewin}}, 1976; {\textit  {Carson}}, 1986; {\textit  {Bartholdy and Billi}}, 2002; {\textit  {Rinaldi}}, 2003].
+
+%...as shown by \citet{jskilby}.
+%...as shown by \citet{lewin76}, \citet{carson86}, \citet{bartoldy02}, and \citet{rinaldi03}.
+%...has been shown \citep{jskilbye}.
+%...has been shown \citep{lewin76,carson86,bartoldy02,rinaldi03}.
+%...has been shown \citep [e.g.,][]{lewin76,carson86,bartoldy02,rinaldi03}.
+%
+% Please use ONLY \citet and \citep for reference citations.
+% DO NOT use other cite commands (e.g., \cite, \citeyear, \nocite, \citealp, etc.).
+
+%% ------------------------------------------------------------------------ %%
+%
+%  END ARTICLE
+%
+%% ------------------------------------------------------------------------ %%
+\end{article}
+%
+%
+%% Enter Figures and Tables here:
+%
+% DO NOT USE \psfrag or \subfigure commands.
+%
+% Figure captions go below the figure.
+% Table titles go above tables; all other caption information
+%  should be placed in footnotes below the table.
+%
+%----------------
+% EXAMPLE FIGURE
+%
+% \begin{figure}
+% \noindent\includegraphics[width=20pc]{samplefigure.eps}
+% \caption{Caption text here}
+% \label{figure_label}
+% \end{figure}
+
+
+%
+% ---------------
+% EXAMPLE TABLE
+%
+%\begin{table}
+%\caption{Time of the Transition Between Phase 1 and Phase 2\tablenotemark{a}}
+%\centering
+%\begin{tabular}{l c}
+%\hline
+% Run  & Time (min)  \\
+%\hline
+%  $l1$  & 260   \\
+%  $l2$  & 300   \\
+%  $l3$  & 340   \\
+%  $h1$  & 270   \\
+%  $h2$  & 250   \\
+%  $h3$  & 380   \\
+%  $r1$  & 370   \\
+%  $r2$  & 390   \\
+%\hline
+%\end{tabular}
+%\tablenotetext{a}{Footnote text here.}
+%\end{table}
+
+% See below for how to make sideways figures or tables.
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+More Information and Advice:
+
+%% ------------------------------------------------------------------------ %%
+%
+%  SECTION HEADS
+%
+%% ------------------------------------------------------------------------ %%
+
+% Capitalize the first letter of each word (except for
+% prepositions, conjunctions, and articles that are
+% three or fewer letters).
+
+% AGU follows standard outline style; therefore, there cannot be a section 1 without
+% a section 2, or a section 2.3.1 without a section 2.3.2.
+% Please make sure your section numbers are balanced.
+% ---------------
+% Level 1 head
+%
+% Use the \section{} command to identify level 1 heads;
+% type the appropriate head wording between the curly
+% brackets, as shown below.
+%
+%An example:
+%\section{Level 1 Head: Introduction}
+%
+% ---------------
+% Level 2 head
+%
+% Use the \subsection{} command to identify level 2 heads.
+%An example:
+%\subsection{Level 2 Head}
+%
+% ---------------
+% Level 3 head
+%
+% Use the \subsubsection{} command to identify level 3 heads
+%An example:
+%\subsubsection{Level 3 Head}
+%
+%---------------
+% Level 4 head
+%
+% Use the \subsubsubsection{} command to identify level 3 heads
+% An example:
+%\subsubsubsection{Level 4 Head} An example.
+%
+%% ------------------------------------------------------------------------ %%
+%
+%  IN-TEXT LISTS
+%
+%% ------------------------------------------------------------------------ %%
+%
+% Do not use bulleted lists; enumerated lists are okay.
+% \begin{enumerate}
+% \item
+% \item
+% \item
+% \end{enumerate}
+%
+%% ------------------------------------------------------------------------ %%
+%
+%  EQUATIONS
+%
+%% ------------------------------------------------------------------------ %%
+
+% Single-line equations are centered.
+% Equation arrays will appear left-aligned.
+
+Math coded inside display math mode \[ ...\]
+ will not be numbered, e.g.,:
+ \[ x^2=y^2 + z^2\]
+
+ Math coded inside \begin{equation} and \end{equation} will
+ be automatically numbered, e.g.,:
+ \begin{equation}
+ x^2=y^2 + z^2
+ \end{equation}
+
+% IF YOU HAVE MULTI-LINE EQUATIONS, PLEASE
+% BREAK THE EQUATIONS INTO TWO OR MORE LINES
+% OF SINGLE COLUMN WIDTH (20 pc, 8.3 cm)
+% using double backslashes (\\).
+
+% To create multiline equations, use the
+% \begin{eqnarray} and \end{eqnarray} environment
+% as demonstrated below.
+\begin{eqnarray}
+  x_{1} & = & (x - x_{0}) \cos \Theta \nonumber \\
+        && + (y - y_{0}) \sin \Theta  \nonumber \\
+  y_{1} & = & -(x - x_{0}) \sin \Theta \nonumber \\
+        && + (y - y_{0}) \cos \Theta.
+\end{eqnarray}
+
+%If you don't want an equation number, use the star form:
+%\begin{eqnarray*}...\end{eqnarray*}
+
+% Break each line at a sign of operation
+% (+, -, etc.) if possible, with the sign of operation
+% on the new line.
+
+% Indent second and subsequent lines to align with
+% the first character following the equal sign on the
+% first line.
+
+% Use an \hspace{} command to insert horizontal space
+% into your equation if necessary. Place an appropriate
+% unit of measure between the curly braces, e.g.
+% \hspace{1in}; you may have to experiment to achieve
+% the correct amount of space.
+
+
+%% ------------------------------------------------------------------------ %%
+%
+%  EQUATION NUMBERING: COUNTER
+%
+%% ------------------------------------------------------------------------ %%
+
+% You may change equation numbering by resetting
+% the equation counter or by explicitly numbering
+% an equation.
+
+% To explicitly number an equation, type \eqnum{}
+% (with the desired number between the brackets)
+% after the \begin{equation} or \begin{eqnarray}
+% command.  The \eqnum{} command will affect only
+% the equation it appears with; LaTeX will number
+% any equations appearing later in the manuscript
+% according to the equation counter.
+%
+
+% If you have a multiline equation that needs only
+% one equation number, use a \nonumber command in
+% front of the double backslashes (\\) as shown in
+% the multiline equation above.
+
+%% ------------------------------------------------------------------------ %%
+%
+%  SIDEWAYS FIGURE AND TABLE EXAMPLES
+%
+%% ------------------------------------------------------------------------ %%
+%
+% For tables and figures, add \usepackage{rotating} to the paper and add the rotating.sty file to the folder.
+% AGU prefers the use of {sidewaystable} over {landscapetable} as it causes fewer problems.
+%
+% \begin{sidewaysfigure}
+% \includegraphics[width=20pc]{samplefigure.eps}
+% \caption{caption here}
+% \label{label_here}
+% \end{sidewaysfigure}
+%
+%
+%
+% \begin{sidewaystable}
+% \caption{}
+% \begin{tabular}
+% Table layout here.
+% \end{tabular}
+% \end{sidewaystable}
+%
+%
+
