@@ -42,7 +42,7 @@ This reports results from modeling the far field radiation patterns for various 
 \begin{article}
 
 \section{Introduction}
-HE Advanced Modular Incoherent Scatter Radar (AMISR) is a modular phased array for atmospheric research at 430-450 MHz. [1]  The current array configurations include a 8x16 panel face in Poker Flat, Alaska and two faces in Resolute Bay, Canada, with ~ 1.1$^{\circ}$ beamwidth, an aperture ~ 715 m$^2$, and gain ~ 43 dBi. [1]
+The Advanced Modular Incoherent Scatter Radar (AMISR) is a modular phased array for atmospheric research at 430-450 MHz. [1]  The current array configurations include a 8x16 panel face in Poker Flat, Alaska and two faces in Resolute Bay, Canada, with ~ 1.1$^{\circ}$ beamwidth, an aperture ~ 715 m$^2$, and gain ~ 43 dBi. [1]
 
 Several other antenna configurations have been proposed.  The antenna radiation and radiation intensity patterns, however, have not been definitively determined.  As a result, it is not known how the predictive antenna pattern should be altered from the idealized case to account for mutual coupling.  In this project we investigate the far field antenna and normalized radiation intensity patterns (Òantenna powerÓ) using numerical simulation to solve MaxwellÕs equations for a realistic array model.  Because the numerical solution includes mutual coupling, we can estimate the mutual coupling effects by comparing the numerical solution to the respective ideal antenna patterns.  
 
@@ -53,7 +53,7 @@ For large arrays mutual coupling is generally addressed by assuming it affects s
 The dense AMISR antennas are subject to mutual coupling among the constituent dipole elements from radiation, electronic cross talk, and indirect scattering from proximate objects.  This report considers the effects of radiative mutual coupling, in which each antenna radiates some portion of received signal to each other antenna element, and likewise receives radiation from each other antenna element as well as from the original source. [2, 3, 4, 5] The variation in the antenna currents results in variations in the element-wise input impedances as well as gain and the far field radiation patterns. The mutual coupling can also excite the polarization not directly excited by the signal source.  [2, 3]  In this project, we focus on the far field radiation pattern amplitude, without considering the detailed affects on element impedance or associated scattering matrix.  Polarization data is available and could be the basis of further study.  
 
 \subsection{Antenna Pattern}
-Active impedance of an array element is difficult to measure and its availability for the proposed AMISR configurations unclear. [3, 4, 5, 6]  In response to this general problem, several predictive numerical techniques have been developed to estimate far field patterns including mutual coupling. [3, 5, 6] By modeling the case of uniform element excitation this study conceptually follows the Òaverage active-element modelÓ insight that groups mutual coupling effects with an ÒaverageÓ antenna element pattern rather than in the element excitation current.  [3, 4]  We do not attempt to calculate an average element pattern, however, but simply compare the numerical model, with mutual coupling, to the ideal antenna pattern.  In particular, we take the idealized cross half wave dipole antenna element radiation intensity as $E_a=1 + \cos^2(\theta)$, and model the array pattern as two interleaved rectangular arrays with 2 dx spacing and a dx, dy/2 relative offset.  [3, 8]  The ideal comparison does not account for reflection from the backplane.
+Active impedance of an array element is difficult to measure and its availability for the proposed AMISR configurations unclear. [3, 4, 5, 6]  In response to this general problem, several predictive numerical techniques have been developed to estimate far field patterns including mutual coupling. [3, 5, 6] By modeling the case of uniform element excitation this study conceptually follows the Òaverage active-element modelÓ insight that groups mutual coupling effects with an ÒaverageÓ antenna element pattern rather than in the element excitation current.  [3, 4]  We do not attempt to calculate an average element pattern, however, but simply compare the numerical model, with mutual coupling, to the ideal antenna pattern.  In particular, we take the idealized cross half wave dipole antenna element radiation intensity as $E_a=1 + \cos^2(\theta)$, and model the array pattern as two interleaved rectangular arrays with 2 dx spacing and a $dx$, $dy/2$ relative offset.  [3, 8]  The ideal comparison does not account for reflection from the backplane.
 
 In numerical antenna simulation the method of moments (MoM) takes mutual coupling into account when solving the applicable Maxwell equations. [3, 5, 6]  While the MoM has been widely used in optimization and design analysis codes like NEC, the method is cumbersome for electrically large problems.  [7, 10] A variation on the MoM formulation, the multipole fast monopole method (MLFMM), is better suited to far field calculations for large structures such as the various proposed AMISR configurations. [9, 10] Generally speaking, the MLFMM formulation uses characteristic basis functions and takes advantage of symmetry / sparsity in the matrix formulation for calculating the full-wave current-based solution of MaxwellÕs equations.  [Id.] The MLFMM solves the interaction between groups of basis functions rather than individual basis functions.  [Id.] This provides more tractable $N \log(N)$ memory scaling, rather than $N\log^2(N)$ scaling with the method of moments formulation. [Id.]  
 
@@ -68,7 +68,9 @@ The long (x) axis element (column) spacing dx = 0.4343 m, while the short (y) ax
 
 The dipole overlap in the AMISR arrays requires a finite array CAD model (e.g., precludes modeling subsets of infinite arrays with periodic boundary conditions), and limits us to replicating core elements without associated finite ground planes.  Nonetheless, the AMISR unit panel symmetry lets us generate a CAD model from a base configuration using two offset cross dipoles above an infinite, perfectly conducting ground plane. 
 
-The dipoles are specified in aluminum using default material parameter files (e.g., $\mu_r$ = 1, $\sigma$ = 3.816e7 S/m) in FEKO, while the vertical post is treated as a perfect conductor.  The dipoles and vertical post are electrically isolated.  We separately excite the x and y oriented dipoles with ports on each element.  The y-oriented dipoles are excited at a 90$^{\circ}$ phase offset from the x-oriented dipoles.  Because we simulate boresight far fields, positional or steering phase offsets are not introduced in the excitation.  The far field simulation uniformly excites each port by 1 V at 440 MHz with 50 $\Omega$ source impedance.  The dipole impedance, of course, varies with mutual coupling in each element as numerically determined in simulation.The AMISR unit panel is then modeled as a 4x4 finite array of the two-element CAD model, with x offset 2 dx and y offset dy.  
+The dipoles are specified in aluminum using default material parameter files (e.g., $\mu_r$ = 1, $\sigma$ = 3.816e7 S/m) in FEKO, while the vertical post is treated as a perfect conductor.  The dipoles and vertical post are electrically isolated.  We separately excite the x and y oriented dipoles with ports on each element.  The y-oriented dipoles are excited at a 90$^{\circ}$ phase offset from the x-oriented dipoles.  Because we simulate boresight far fields, positional or steering phase offsets are not introduced in the excitation.  The far field simulation uniformly excites each port by 1 V at 440 MHz with 50 $\Omega$ source impedance.  The dipole impedance, of course, varies with mutual coupling in each element as numerically determined in simulation.
+
+The AMISR unit panel is then modeled as a 4x4 finite array of the two-element CAD model, with x offset 2 dx and y offset dy.  
 
 The AMISR unit panel CAD model is scaled by m and n for m x-oriented panels, and n y-oriented panels to create the CAD model for a m x n panel array.  The ground plane is imposed after scaling the two-element CAD model for the desired array configuration.
 
@@ -90,147 +92,71 @@ Ideal antenna patterns for each given configuration were also computed, without 
 
 The simulation results are provided in the appendix (Sections I-III), and accompanying data files.  The 8x16 simulations recover the published AMISR gain and beamwidth, suggesting reasonable agreement on boresight between the CAD model and the AMISR design specification.  For exposition the 1x32 array results are considered more closely.  As shown in Figs. 7 and 9, the ideal antenna power pattern (normalized radiation intensity) settles into a series of lobes with roughly constant max value greater than Ð 20 dBi ($\phi = 0^\circ$) and -50 dBi ($\phi = 90^\circ$) for $|\theta| > 30^\circ$.
 
-The numerical solution (with mutual coupling) continues to fall, however, as elevation comes down off boresight, differing in some instances by more than 20 dBi from the idealized pattern.  For $|\theta|\ge 20^\circ$ this amounts to a $\theta$ dependent reduction in relative amplitude for the antenna power pattern, while preserving the relative pattern shape (for $\theta < 80^\circ$).  Figures 8 and 10 show the corresponding normalized radiation patterns (ideal and by MLFMM) for $\phi=0, 90^\circ$. As suggested by both the gain and pattern plots, the edge effects diminish with center lobe beamwidth.  Given the high center-lobe gain, the coupling effects may be insignificant on boresight, or even desirable insofar as they reduce off-center detection.  In the $\phi = 0^\circ$ orientation, for example, the calculated edge effect (or, more precisely, the actual radiation intensity pattern) suppresses the third and fourth sidelobe levels at $|\theta|$ = 40 or 60$^\circ$.  A $\theta$-dependent average active-element pattern might be extracted from the ratio of normalized antenna radiation patterns for a range of $\phi$, see Appendix, Section II.B, but in general the difference attributable to edge effects at low elevation for the desired low beamwidth $\phi = 90^\circ$ scan is marginal. Similar results can be seen in the Appendix for the 2x4 and 8x16 configurations.
+The numerical solution (with mutual coupling) continues to fall, however, as elevation comes down off boresight, differing in some instances by more than 20 dBi from the idealized pattern.  For $|\theta|\ge 20^\circ$ this amounts to a $\theta$ dependent reduction in relative amplitude for the antenna power pattern, while preserving the relative pattern shape (for $\theta < 80^\circ$).  
+
+Figures 8 and 10 show the corresponding normalized radiation patterns (ideal and by MLFMM) for $\phi=0, 90^\circ$. As suggested by both the gain and pattern plots, the edge effects diminish with center lobe beamwidth.  Given the high center-lobe gain, the coupling effects may be insignificant on boresight, or even desirable insofar as they reduce off-center detection.  In the $\phi = 0^\circ$ orientation, for example, the calculated edge effect (or, more precisely, the actual radiation intensity pattern) suppresses the third and fourth sidelobe levels at $|\theta|$ = 40 or 60$^\circ$.  A $\theta$-dependent average active-element pattern might be extracted from the ratio of normalized antenna radiation patterns for a range of $\phi$, see Appendix, Section II.B, but in general the difference attributable to edge effects at low elevation for the desired low beamwidth $\phi = 90^\circ$ scan is marginal. 
+
+Similar results can be seen in the Appendix for the 2x4 and 8x16 configurations.
 
 \section{Conclusions}
 
 Mutual coupling appears to have marginal impact on far field patterns for boresight operation in the three configurations investigated at $\phi=0$ or 90$^\circ$.  The primary effect is a conceptually beneficial reduction in gain and antenna pattern off beam center, at low elevations.  The edge effects appear at elevation greater than 20$^\circ$ from boresight.  This suggests that mutual effects may be more significant for beam steering at more than 20$^\circ$ off center, and may warrant further study by numerical techniques set forth in this report.
 
 \section{Future Simulations}
-The far field simulations provide richer results than explored in this summary report.  For example, the results include data on the far field polarization that has not been explored.  That information could be investigated further, in comparison with the idealized array as needed to isolate mutual coupling effects.Future simulations for AMISR array configurations could examine mutual coupling affects on antenna patterns for beam steering near the grating lobe limits.  Given an antenna array configuration, the relevant phase delays could be manually added between dipole elements.  Because each cross dipole consists of two ports, this manual approach would entail assigning phase delays for twice as many sources as cross dipole antenna elements.  It may be straightforward to script this phase delay specification.  Alternatively, the simulation could specify source phase delays / amplitude variations by loading suitable data files from actual AMISR runs for the steering angles of interest.  This will require some greater facility with the FEKO suite, as well as more data files from SRI International, but should be tractable.  Depending on the array configurations and number of elements, as well as the hardware used, each steering angle may entail several hours for the associated far field radiation pattern calculations.  FEKO scripting capability, however, probably allows for largely automating the problem setup. 
+The far field simulations provide richer results than explored in this summary report.  For example, the results include data on the far field polarization that has not been explored.  That information could be investigated further, in comparison with the idealized array as needed to isolate mutual coupling effects.
+
+Future simulations for AMISR array configurations could examine mutual coupling affects on antenna patterns for beam steering near the grating lobe limits.  Given an antenna array configuration, the relevant phase delays could be manually added between dipole elements.  Because each cross dipole consists of two ports, this manual approach would entail assigning phase delays for twice as many sources as cross dipole antenna elements.  It may be straightforward to script this phase delay specification.  Alternatively, the simulation could specify source phase delays / amplitude variations by loading suitable data files from actual AMISR runs for the steering angles of interest.  This will require some greater facility with the FEKO suite, as well as more data files from SRI International, but should be tractable.  Depending on the array configurations and number of elements, as well as the hardware used, each steering angle may entail several hours for the associated far field radiation pattern calculations.  FEKO scripting capability, however, probably allows for largely automating the problem setup. 
+
+\appendix
+\section{Derivation of Idealized AMISR Array Pattern} \label{App:AMISRarr}
+The current antenna on the AMISR systems is made up 8x16 set of panel of half wave cross dipoles. Each panel has 32 cross dipoles in a 8x4 hexagonal configuration. In the current set up at the Poker Flat site this yields at 4096 element array in a 64x64 element hexagonal configuration.
+
+In order to simplify the antenna can be treated as two rectangular arrays of cross dipoles interleaved together. In the $x$ direction each of these arrays will have a spacing of $2d_x$ with $M/2$ elements. The $y$ direction will be of length $N$ elements and spacing $d_y$. Using basic planar phase array theory, \citep{Balanis:2005:ATA:1208379}, we can start with the linear array pattern from the first array can be represented as 
+
+\begin{equation}
+\label{eqn:arrpat1}
+E_1(\theta,\phi) =\displaystyle \sum_{m=1}^{M/2}\sum_{n=1}^{N} e^{-j2\left(m-1\right)kd_x\sin\theta\cos\phi -j\left(n-1\right) k d_y\sin\theta\sin\phi}.
+\end{equation}
+
+\noindent Since the second array can be though of a shifted version of the first in the $x$ direction we get the following
+
+\begin{equation}
+\label{eqn:arrpat2}
+E_2(\theta,\phi) =\displaystyle \sum_{m=1}^{M/2}\sum_{n=1}^{N} e^{-j\left(2m-1\right)kd_x\sin\theta\cos\phi -j\left(n-1/2\right) k d_y\sin\theta\sin\phi}.
+\end{equation}
+
+In order to simplify notation we will make the following substitutions, $\psi_x = -k d_x\sin\theta\cos\phi$, $\psi_y = -k d_y\sin\theta\sin\phi$. Using Equations \ref{eqn:arrpat1} and \ref{eqn:arrpat2} we can see the following relationship,
+
+\begin{equation}
+\label{eqn:arrpateqn}
+E_2(\theta,\phi)  = e^{j(\psi_y/2 + \psi_x)} E_1(\theta,\phi)  = \displaystyle \sum_{m=1}^{M/2}\sum_{n=1}^{N} e^{-j2\left(m-1\right) \psi_x -j\left(n-1\right) \psi_y}.
+\end{equation}
+
+\noindent Adding $E_1$ and $E_2$ together we get the following linear array pattern
+
+\begin{equation} \label{eq1}
+\begin{split}
+E(\theta,\phi) &= \displaystyle  \left(1+e^{j(\psi_y/2 + \psi_x)}\right)\sum_{m=1}^{M/2}\sum_{n=1}^{N} e^{-j2\left(m-1\right) \psi_x -j\left(n-1\right) \psi_y}.\\
+& = \frac{1}{MN} \left(1+e^{j(\psi_y/2 + \psi_x)}\right)\frac{\sin((M/2) \psi_x)}{\sin(\psi_x)} \frac{\sin((N/2) \psi_x)}{\sin(\psi_x/2)}.
+\end{split}
+\end{equation}
+
+Since the array is steerable this can be taken into account in the equations by simply changing the definitions of $\psi_x $ and $\psi_y$ to $\psi_x = k d_x(\sin\theta\cos\phi-\sin\theta_s\cos\phi_s)$, and $\psi_y = k d_y(\sin\theta\sin\phi-\sin\theta_s\sin\phi_s)$. Lastly the antenna pattern of a single cross dipole can be represented as $ \frac{1}{2}(1+\cos(\theta)^2)$\citep{Balanis:2005:ATA:1208379}. By taking the squared magnitude of the array factor and multiplying it with the pattern of the dipole we get Equation \ref{eqn:amisrpat},
+
+\begin{equation}
+\label{eqn:amisrpatfinal}
+F(\theta_s,\phi_s,\theta,\phi) = \frac{1}{2}(1+\cos(\theta)^2)\left| \frac{1}{MN} \left(1+e^{j(\psi_y/2 + \psi_x)}\right)\frac{\sin((M/2) \psi_x)}{\sin(\psi_x)} \frac{\sin((N/2) \psi_x)}{\sin(\psi_x/2)}\right|^2.
+\end{equation}
+ 
 
 
 \begin{acknowledgments}
 (Text here)
 \end{acknowledgments}
 
-%% ------------------------------------------------------------------------ %%
-%%  REFERENCE LIST AND TEXT CITATIONS
-%
-% Either type in your references using
-% \begin{thebibliography}{}
-% \bibitem{}
-% Text
-% \end{thebibliography}
-%
-% Or,
-%
-% If you use BiBTeX for your references, please use the agufull08.bst file (available at % ftp://ftp.agu.org/journals/latex/journals/Manuscript-Preparation/) to produce your .bbl
-% file and copy the contents into your paper here.
-%
-% Follow these steps:
-% 1. Run LaTeX on your LaTeX file.
-%
-% 2. Make sure the bibliography style appears as \bibliographystyle{agufull08}. Run BiBTeX on your LaTeX
-% file.
-%
-% 3. Open the new .bbl file containing the reference list and
-%   copy all the contents into your LaTeX file here.
-%
-% 4. Comment out the old \bibliographystyle and \bibliography commands.
-%
-% 5. Run LaTeX on your new file before submitting.
-%
-% AGU does not want a .bib or a .bbl file. Please copy in the contents of your .bbl file here.
-
-\begin{thebibliography}{}
-
-%\providecommand{\natexlab}[1]{#1}
-%\expandafter\ifx\csname urlstyle\endcsname\relax
-%  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
-%  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
-%  \urlstyle{rm}\Url}\fi
-%
-%\bibitem[{\textit{Atkinson and Sloan}(1991)}]{AtkinsonSloan}
-%Atkinson, K., and I.~Sloan (1991), The numerical solution of first-kind
-%  logarithmic-kernel integral equations on smooth open arcs, \textit{Math.
-%  Comp.}, \textit{56}(193), 119--139.
-%
-%\bibitem[{\textit{Colton and Kress}(1983)}]{ColtonKress1}
-%Colton, D., and R.~Kress (1983), \textit{Integral Equation Methods in
-%  Scattering Theory}, John Wiley, New York.
-%
-%\bibitem[{\textit{Hsiao et~al.}(1991)\textit{Hsiao, Stephan, and
-%  Wendland}}]{StephanHsiao}
-%Hsiao, G.~C., E.~P. Stephan, and W.~L. Wendland (1991), On the {D}irichlet
-%  problem in elasticity for a domain exterior to an arc, \textit{J. Comput.
-%  Appl. Math.}, \textit{34}(1), 1--19.
-%
-%\bibitem[{\textit{Lu and Ando}(2012)}]{LuAndo}
-%Lu, P., and M.~Ando (2012), Difference of scattering geometrical optics
-%  components and line integrals of currents in modified edge representation,
-%  \textit{Radio Sci.}, \textit{47},  RS3007, \doi{10.1029/2011RS004899}.
-
-\end{thebibliography}
-
-%Reference citation examples:
-
-%...as shown by \textit{Kilby} [2008].
-%...as shown by {\textit  {Lewin}} [1976], {\textit  {Carson}} [1986], {\textit  {Bartholdy and Billi}} [2002], and {\textit  {Rinaldi}} [2003].
-%...has been shown [\textit{Kilby et al.}, 2008].
-%...has been shown [{\textit  {Lewin}}, 1976; {\textit  {Carson}}, 1986; {\textit  {Bartholdy and Billi}}, 2002; {\textit  {Rinaldi}}, 2003].
-%...has been shown [e.g., {\textit  {Lewin}}, 1976; {\textit  {Carson}}, 1986; {\textit  {Bartholdy and Billi}}, 2002; {\textit  {Rinaldi}}, 2003].
-
-%...as shown by \citet{jskilby}.
-%...as shown by \citet{lewin76}, \citet{carson86}, \citet{bartoldy02}, and \citet{rinaldi03}.
-%...has been shown \citep{jskilbye}.
-%...has been shown \citep{lewin76,carson86,bartoldy02,rinaldi03}.
-%...has been shown \citep [e.g.,][]{lewin76,carson86,bartoldy02,rinaldi03}.
-%
-% Please use ONLY \citet and \citep for reference citations.
-% DO NOT use other cite commands (e.g., \cite, \citeyear, \nocite, \citealp, etc.).
-
-%% ------------------------------------------------------------------------ %%
-%
-%  END ARTICLE
-%
-%% ------------------------------------------------------------------------ %%
+\bibliographystyle{BibTeX/agufull08}
+\bibliography{BibTeX/Amisrarray}
 \end{article}
-%
-%
-%% Enter Figures and Tables here:
-%
-% DO NOT USE \psfrag or \subfigure commands.
-%
-% Figure captions go below the figure.
-% Table titles go above tables; all other caption information
-%  should be placed in footnotes below the table.
-%
-%----------------
-% EXAMPLE FIGURE
-%
-% \begin{figure}
-% \noindent\includegraphics[width=20pc]{samplefigure.eps}
-% \caption{Caption text here}
-% \label{figure_label}
-% \end{figure}
-
-
-%
-% ---------------
-% EXAMPLE TABLE
-%
-%\begin{table}
-%\caption{Time of the Transition Between Phase 1 and Phase 2\tablenotemark{a}}
-%\centering
-%\begin{tabular}{l c}
-%\hline
-% Run  & Time (min)  \\
-%\hline
-%  $l1$  & 260   \\
-%  $l2$  & 300   \\
-%  $l3$  & 340   \\
-%  $h1$  & 270   \\
-%  $h2$  & 250   \\
-%  $h3$  & 380   \\
-%  $r1$  & 370   \\
-%  $r2$  & 390   \\
-%\hline
-%\end{tabular}
-%\tablenotetext{a}{Footnote text here.}
-%\end{table}
-
-% See below for how to make sideways figures or tables.
 
 \end{document}
 
